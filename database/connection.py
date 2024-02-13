@@ -11,11 +11,3 @@ engien = psycopg2.connect(
 )
 
 cursor = engien.cursor()
-
-# hellot
-
-
-# jkdshbfkjhbsdjkbfks
-
-
-# test
