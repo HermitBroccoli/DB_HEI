@@ -1,0 +1,5 @@
+psycopg2-binary
+envdatareader == 1.6.1
+asyncpg
+flake8
+autopep8
