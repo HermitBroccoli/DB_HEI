@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:latest
+    container_name: database
+    hostname: psql
+    environment:
+    - POSTGRES_USER=${DB_USER}
+    - POSTGRES_PASSWORD=${DB_PASSWD}
+    - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - ./vm/postgres:/var/lib/postgresql/data
+
+volumes:
+  vm:

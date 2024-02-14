@@ -3,3 +3,4 @@ envdatareader == 1.6.1
 asyncpg
 flake8
 autopep8
+bcrypt

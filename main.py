@@ -1,30 +1,10 @@
-from tkinter import * # noqa
-from tkinter import Tk
-
-
-class MainWindow(Tk):
-
-    def __init__(self, title: str):
-        super().__init__()
-        self.title = title
-        self.geometry("1280x720")
-
-        self.label = Label(
-            self,
-            text="Test"
-        )
-
-        self.label.grid(
-            row=0,
-            column=0
-        )
+from windows import LoginWindow
 
 
 def main():
 
-    app = MainWindow("Университет")
-
-    app.mainloop()
+    login = LoginWindow()
+    login.mainloop()
 
 
 if __name__ == '__main__':
