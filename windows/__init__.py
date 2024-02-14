@@ -1,2 +1,3 @@
-from windows.LoginWindows import LoginWindow  # noqa
-from windows.MainWindows import MainWindow # noqa
+from .LayoutWindows import LayoutWindow # noqa
+from .MainWindows import MainWindow # noqa
+from .LoginWindows import LoginWindow # noqa

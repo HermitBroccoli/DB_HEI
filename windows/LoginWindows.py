@@ -1,12 +1,14 @@
-from tkinter import Tk, Label, Frame, Entry, Button, ttk
+from tkinter import Label, Frame, Entry, Button, ttk, messagebox
+from database.connection import login
+from features.hashing import PasswordManager
+from windows import MainWindow, LayoutWindow
 
 
-class LoginWindow(Tk):
+class LoginWindow(LayoutWindow):
 
     def __init__(self):
         super().__init__()
         self.title("Login")
-        self.geometry("1280x720")
 
         # Создаем стиль ttk (темный)
         self.style = ttk.Style()
@@ -26,6 +28,7 @@ class LoginWindow(Tk):
 
         self.input1 = Entry(self.frame)
         self.input1.grid(row=0, column=1, padx=5, pady=5)
+        self.input1.focus_set()
 
         self.label2 = Label(self.frame, text="Пароль:", bg="black", fg="white")
         self.label2.grid(row=1, column=0, sticky="e")
@@ -33,8 +36,30 @@ class LoginWindow(Tk):
         self.input2 = Entry(self.frame, show="*")
         self.input2.grid(row=1, column=1, padx=5, pady=5)
 
-        self.button = Button(self.frame, text="Войти")
+        self.button = Button(self.frame, text="Войти", command=self.__login)
         self.button.grid(row=2, columnspan=2)
 
-    def __login(self, username: str, password: str):
-        pass
+    def __login(self):
+        user = "".join(self.input1.get().split())
+        password = self.input2.get()  # noqa
+
+        login_res = login(username=user, func=self.__error_message)
+
+        if not login_res:
+            self.__error_message()
+            return
+
+        if not PasswordManager.verify_password(password, login_res.get("password")):  # noqa
+            self.__error_message()
+            return
+
+        self.__main_open()
+
+    def __error_message(self):
+        messagebox.showerror("Ошибка", "Ошибка авторизации!")
+
+    def __main_open(self):
+        self.destroy()
+        main_win = MainWindow("Университет")
+        main_win.focus_force()
+        main_win.mainloop()

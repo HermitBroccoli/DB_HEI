@@ -14,9 +14,9 @@ env = EnvDataReader()
 
 # основные чуствительные элементы
 DB_CONNECT: database = {
-    "host": env.get_value("DB_HOST", "localhost"),
-    "port": int(env.get_value("DB_PORT", 5432)),
-    "user": env.get_value("DB_USER", "postgres"),
+    "host": env.get_value("DB_HOST", default_val="localhost"),
+    "port": int(env.get_value("DB_PORT", default_val="5432")),
+    "user": env.get_value("DB_USER", default_val="postgres"),
     "passwd": env.get_value("DB_PASSWD"),
-    "dbName": env.get_value("DB_NAME", "postgres")
+    "dbName": env.get_value("DB_NAME", default_val="postgres")
 }

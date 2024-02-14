@@ -1,26 +1,6 @@
 import psycopg2
-from envdatareader import EnvDataReader
-from typing import TypedDict
-
-
-class database(TypedDict):
-    host: str
-    port: int
-    user: str
-    passwd: str
-    dbName: str
-
-
-env = EnvDataReader()
-
-# основные чуствительные элементы
-DB_CONNECT: database = {
-    "host": env.get_value("DB_HOST", "localhost"),
-    "port": int(env.get_value("DB_PORT")),
-    "user": env.get_value("DB_USER", "postgres"),
-    "passwd": env.get_value("DB_PASSWD"),
-    "dbName": env.get_value("DB_NAME", "postgres")
-}
+from typing import Callable
+from core.env import DB_CONNECT
 
 
 engien = psycopg2.connect(
@@ -33,25 +13,19 @@ engien = psycopg2.connect(
 
 cursor = engien.cursor()
 
-print(DB_CONNECT)
 
-
-def login(username: str):
+def login(username: str, func: Callable[[], None]):
     try:
         cursor.execute("SELECT * FROM users WHERE login = %s", (username,))  # noqa
 
         user = cursor.fetchone()  # Получение первой строки результата запроса
 
-        print(user)
+        if not user:
+            return
 
-        if user:
-            print("Авторизация успешна.")
-        else:
-            print("Неверный логин.")
+        id, login, password, role = user
+
+        return {"id": id, "login": login, "password": password, "role": role}
 
     except Exception as e:
         print("Ошибка при выполнении запроса:", e)
-
-
-login("broccoli")
-

@@ -22,6 +22,3 @@ class PasswordManager:
         return bcrypt.checkpw(
             input_password.encode('utf-8'),
             hashed_password.encode('utf-8'))
-
-
-print(PasswordManager.hash_password("qXmZZ7U8"))
