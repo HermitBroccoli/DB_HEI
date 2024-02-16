@@ -1,5 +1,7 @@
-from tkinter import Label, Menu
+from tkinter import Menu
+from tkinter.ttk import Notebook
 from windows.LayoutWindows import LayoutWindow
+from .tabs.ProfileFrame import ProfilePage
 
 
 class MainWindow(LayoutWindow):
@@ -8,15 +10,17 @@ class MainWindow(LayoutWindow):
         super().__init__()
         self.title(title)
 
-        self.label = Label(self, text="Test")
+        self.m = Menu(self)
+        self.mf = Menu(self.m, tearoff=0)
+        self.mf.add_separator()
+        self.mf.add_command(label="Выход", command=self.destroy)
 
-        self.label.grid(row=0, column=0)
+        self.m.add_cascade(label="Файл", menu=self.mf)
 
-        m = Menu(self)
-        mf = Menu(m, tearoff=0)
-        mf.add_separator()
-        mf.add_command(label="Exit", command=self.destroy)
+        self.tabs = Notebook(self)
 
-        m.add_cascade(label="Файл", menu=mf)
+        self.tabs.add(ProfilePage(), text="Профиль")
 
-        self.config(menu=m)
+        self.tabs.pack(expand=1, fill="both")
+
+        self.config(menu=self.m)
