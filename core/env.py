@@ -1,6 +1,8 @@
-from envdatareader import EnvDataReader
+from dotenv import load_dotenv
 from typing import TypedDict
+import os
 
+load_dotenv('.env')
 
 class database(TypedDict):
     host: str
@@ -9,14 +11,13 @@ class database(TypedDict):
     passwd: str
     dbName: str
 
-
-env = EnvDataReader()
-
 # основные чуствительные элементы
 DB_CONNECT: database = {
-    "host": env.get_value("DB_HOST", "localhost"),
-    "port": int(env.get_value("DB_PORT", 5432)),
-    "user": env.get_value("DB_USER", "postgres"),
-    "passwd": env.get_value("DB_PASSWD"),
-    "dbName": env.get_value("DB_NAME", "postgres")
+    "host": os.getenv("DB_HOST"),
+    "port": os.getenv("DB_PORT"),
+    "user": os.getenv("DB_USER"),
+    "passwd": os.getenv("DB_PASSWD"),
+    "dbName": os.getenv("DB_NAME")
 }
+
+print(DB_CONNECT)

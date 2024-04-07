@@ -1,5 +1,5 @@
 psycopg2-binary
-envdatareader == 1.6.1
+python-dotenv
 asyncpg
 flake8
 autopep8
