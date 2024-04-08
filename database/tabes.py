@@ -14,13 +14,14 @@ cur = engien.cursor()
 """ create database """
 
 cur.execute(
-    """CREATE DATABASE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    surname VARVHAR(50) NOT NULL,
-    name VARVHAR(50) NOT NULL,
-    login VARVHAR(50) NOT NULL,
-    password VARVHAR(255) NOT NULL
-    )"""
+    """CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            surname VARCHAR(50) NOT NULL,
+            name VARCHAR(50) NOT NULL,
+            login VARCHAR(50) NOT NULL,
+            password VARCHAR(255) NOT NULL,
+            role VARCHAR(50) NOT NULL DEFAULT 'Преподаватель'
+        )"""
 )
 
 cur.commit()
@@ -53,7 +54,7 @@ cur.execute("""
 cur.commit()
 
 cur.execute("""
-CREATE TABLE Chiefs (
+CREATE TABLE IF NOT EXISTS Chiefs (
     chiefID INT PRIMARY KEY,
     lastName VARCHAR(100),
     firstName VARCHAR(100),
@@ -66,7 +67,7 @@ CREATE TABLE Chiefs (
 cur.commit()
 
 cur.execute("""
-CREATE TABLE BuildingPhotos (
+CREATE TABLE IF NOT EXISTS BuildingPhotos (
     id_photo SERIAL PRIMARY KEY,
     id_building INT REFERENCES Buildings(id_building),
     photo BYTEA
@@ -77,7 +78,7 @@ CREATE TABLE BuildingPhotos (
 cur.commit()
 
 cur.execute("""
-    CREATE TABLE Halls (
+    CREATE TABLE IF NOT EXISTS Halls (
         hallID SERIAL PRIMARY KEY,
         square INT,
         windows INT,
@@ -92,7 +93,7 @@ cur.execute("""
 cur.commit()
 
 cur.execute("""
-CREATE TABLE Equipment (
+CREATE TABLE IF NOT EXISTS Equipment (
     unitID SERIAL PRIMARY KEY,
     unitName VARCHAR(100),
     dateStart DATE,
@@ -107,7 +108,7 @@ CREATE TABLE Equipment (
 cur.commit()
 
 cur.execute("""
-CREATE TABLE Departments (
+CREATE TABLE IF NOT EXISTS Departments (
     departmentID SERIAL PRIMARY KEY,
     departmentName VARCHAR(100),
     boss VARCHAR(100),
