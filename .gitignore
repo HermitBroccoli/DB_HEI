@@ -3,3 +3,5 @@ venv
 .vscode
 vm
 __pycache__
+*.zip
+*.rar
