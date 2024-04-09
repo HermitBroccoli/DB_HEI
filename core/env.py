@@ -1,8 +1,9 @@
 from dotenv import load_dotenv
+from envdatareader import EnvDataReader
 from typing import TypedDict
 import os
 
-load_dotenv('.env')
+env = EnvDataReader()
 
 class database(TypedDict):
     host: str
@@ -13,11 +14,11 @@ class database(TypedDict):
 
 # основные чуствительные элементы
 DB_CONNECT: database = {
-    "host": os.getenv("DB_HOST"),
-    "port": os.getenv("DB_PORT"),
-    "user": os.getenv("DB_USER"),
-    "passwd": os.getenv("DB_PASSWD"),
-    "dbName": os.getenv("DB_NAME")
+    "host": env.get_value("DB_HOST"),
+    "port": env.get_value("DB_PORT"),
+    "user": env.get_value("DB_USER"),
+    "passwd": env.get_value("DB_PASSWD"),
+    "dbName": env.get_value("DB_NAME")
 }
 
 print(DB_CONNECT)

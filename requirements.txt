@@ -4,3 +4,4 @@ asyncpg
 flake8
 autopep8
 bcrypt
+senvdatareader

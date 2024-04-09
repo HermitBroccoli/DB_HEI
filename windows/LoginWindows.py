@@ -1,4 +1,6 @@
-from tkinter import Tk, Label, Frame, Entry, Button, ttk
+from tkinter import END, Tk, Label, Frame, Entry, Button, ttk
+from database.connection import login
+from tkinter.messagebox import showerror
 
 
 class LoginWindow(Tk):
@@ -33,8 +35,23 @@ class LoginWindow(Tk):
         self.input2 = Entry(self.frame, show="*")
         self.input2.grid(row=1, column=1, padx=5, pady=5)
 
-        self.button = Button(self.frame, text="Войти")
+        self.button = Button(self.frame, text="Войти", command=self.__login)
         self.button.grid(row=2, columnspan=2)
 
-    def __login(self, username: str, password: str):
-        pass
+        self.input1.focus_set()
+
+    def __login(self):
+        logins = login(self.input1.get(), self.input2.get())
+
+        if not logins:
+            self.input1.delete(0, END)
+            self.input2.delete(0, END)
+            showerror(title="Ошибка", message="Неправильный логин или пароль")
+            self.input1.focus_set()
+            return
+
+        self.destroy()
+        from windows.MainWindows import MainWindow
+        app = MainWindow()
+        app.mainloop()
+

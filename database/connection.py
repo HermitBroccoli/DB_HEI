@@ -1,4 +1,5 @@
 import psycopg2
+import bcrypt
 from core.env import DB_CONNECT
 
 from typing import TypedDict
@@ -22,25 +23,32 @@ engien = psycopg2.connect(
 
 cursor = engien.cursor()
 
-print(DB_CONNECT)
 
+def verify_password(password: str, hash_password: str) -> bool:
+    if not password:
+        return False
+    
+    return bcrypt.checkpw(password.encode('utf-8'), hash_password.encode('utf-8'))
 
-def login(username: str):
+def login(username: str, password: str) -> None:
     try:
         cursor.execute("SELECT * FROM users WHERE login = %s", (username,))  # noqa
 
         user = cursor.fetchone()  # Получение первой строки результата запроса
 
-        print(user)
+        id, surname, name, login, passwords, role = user
 
-        if user:
-            print("Авторизация успешна.")
-        else:
+        if not user:
             print("Неверный логин.")
+
+        if not verify_password(password, passwords):
+            return False
+
+        return True
+
+        
 
     except Exception as e:
         print("Ошибка при выполнении запроса:", e)
 
-
-login("broccoli")
 
