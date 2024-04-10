@@ -10,26 +10,27 @@ from typing import List, Dict
 from pydantic import BaseModel
 
 
-def isUsers(request: Request) -> object:
+async def isUsers(request: Request) -> dict:
     id = request.cookies.get('id')
-    role = request.cookies.get('role').encode('utf-8')
+    
+    res = await getUser(int(id))
 
-    if not id or not role:
+    if not id:
         return RedirectResponse('/login')
 
-    if role == "Администратор":
+    if res.get('role') == "Администратор":
         return {
             "admin": True,
             "materOt": False,
             "user": False
         }
-    elif role == "Материально. отвественный":
+    elif res.get('role') == "Материально. отвественный":
         return {
             "admin": False,
             "materOt": True,
             "user": False
         }
-    elif role == "Пользователь":
+    elif res.get('role') == "Пользователь":
         return {
             "admin": False,
             "materOt": False,
@@ -91,12 +92,11 @@ async def login(user: User, response: Response):
 
 @app.get('/admin')
 async def admin(request: Request):
-    role_cookie = request.cookies.get('role')
-    if isinstance(role_cookie, bytes):
-        role = role_cookie.decode('utf-8')
-        print(role)
+    
+    res = await isUsers(request)
 
-    print(role_cookie)
+    if not res.get('admin'):
+        return RedirectResponse('/')
 
     return tempalte.TemplateResponse("admin/index.j2", {"request": request})
 

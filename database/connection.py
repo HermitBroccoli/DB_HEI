@@ -58,3 +58,20 @@ async def logins(username: str, password: str) -> object:
 
     except Exception as e:
         print("Ошибка при выполнении запроса:", e)
+
+async def getUser(id: int) -> dict:
+    try:
+        cursor.execute("SELECT * FROM users WHERE id = %s", (id,))
+        res = cursor.fetchone()
+
+        id, surname, name, login, passwords, role = res
+
+        return {
+            "id": id,
+            "surname": surname,
+            "name": name,
+            "role": role
+        }
+
+    except Exception as e:
+        pass
