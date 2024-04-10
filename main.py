@@ -19,7 +19,7 @@ async def index(request: Request):
 
 @app.get('/login')
 async def login(request: Request):
-        return tempalte.TemplateResponse("login.html", {"request": request})
+    return tempalte.TemplateResponse("login/login.html.j2", {"request": request})
                 
 if __name__ == "__main__":
     import uvicorn
