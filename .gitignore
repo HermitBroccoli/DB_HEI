@@ -5,3 +5,4 @@ vm
 __pycache__
 *.zip
 *.rar
+*.exe
