@@ -1,4 +1,3 @@
-from windows import LoginWindow
 from fastapi import Request, Response, status
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -12,6 +11,7 @@ app = FastAPI()
 tempalte = Jinja2Templates(directory="resources/views")
 
 app.mount("/static", StaticFiles(directory="resources/"), name="resources")
+app.mount("/public", StaticFiles(directory="public"), name="public")
 
 @app.get("/")
 async def index(request: Request):
