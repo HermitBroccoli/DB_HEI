@@ -1,0 +1,21 @@
+{% extends "base.j2" %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block content %}
+
+<div class="w-full h-full flex justify-center items-center">
+    <form id="login-form" class="flex flex-col justify-center space-y-4">
+        <label for="login">
+            <span>Логин:</span>
+            <input type="text" id="login" name="login" placeholder="Логин" class="w-full border px-[2px] py-[5px]">
+        </label>
+        <label for="password">
+            <span>Пароль:</span>
+            <input type="password" id="password" name="password" placeholder="Пароль" class="w-full border px-[2px] py-[5px]">
+        </label>
+        <button type="submit" class="px-[25px] py-[10px] bg-green-900 text-white rounded">Войти</button>
+    </form>
+</div>
+
+{% endblock %}

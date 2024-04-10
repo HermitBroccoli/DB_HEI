@@ -27,28 +27,34 @@ cursor = engien.cursor()
 def verify_password(password: str, hash_password: str) -> bool:
     if not password:
         return False
-    
+
     return bcrypt.checkpw(password.encode('utf-8'), hash_password.encode('utf-8'))
 
-def login(username: str, password: str) -> None:
+
+async def logins(username: str, password: str) -> object:
     try:
-        cursor.execute("SELECT * FROM users WHERE login = %s", (username,))  # noqa
+        # Выполняем запрос
+        cursor.execute("SELECT * FROM users WHERE login = %s", (username,))
 
-        user = cursor.fetchone()  # Получение первой строки результата запроса
+        # Получаем пользователя по логину
+        user = cursor.fetchone()
 
+        # Проверяем, существует ли пользователь
+        if not user:
+            return False
+
+        # Извлекаем данные о пользователе
         id, surname, name, login, passwords, role = user
 
-        if not user:
-            print("Неверный логин.")
-
+        # Проверяем пароль
         if not verify_password(password, passwords):
             return False
 
-        return True
-
-        
+        # Возвращаем данные пользователя
+        return {
+            "id": id,
+            "role": role
+        }
 
     except Exception as e:
         print("Ошибка при выполнении запроса:", e)
-
-

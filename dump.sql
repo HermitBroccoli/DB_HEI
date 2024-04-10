@@ -97,7 +97,7 @@ VALUES
         'Кузьменко',
         'Богдан',
         'gbroccoli',
-        crypt ('qXmZZ7U8', gen_salt ('bf')),
+        '$2b$12$CjT.UzXaRq3/7hUOfOjDrOtfU2OqwrCzzdln0ry8A23cQ.dZgEEdK',
         'Администратор'
     );
 
@@ -109,7 +109,7 @@ VALUES
         'Смирнов',
         'Алексей',
         'alex_smirnov',
-        crypt ('password4', gen_salt ('bf')),
+        '$2b$12$2HaMsFP4vqUnwJ2oL334DODQlzajmm4F3W/7SOMvzKkffO.jXkor.',
         'Преподаватель'
     );
 
@@ -120,7 +120,7 @@ VALUES
         'Попов',
         'Андрей',
         'andrey_popov',
-        crypt ('password6', gen_salt ('bf')),
+        '$2b$12$rlH5HDu5ZCkyKrSWdrnYTeCqJo4tYEmta/xh7FzkNaHsKx93.IpDO',
         'Материально. отвественный'
     );
 
@@ -131,7 +131,7 @@ VALUES
         'Васильев',
         'Дмитрий',
         'dmitry_vasilyev',
-        crypt ('password7', gen_salt ('bf')),
+        '$2b$12$AOniInn8qRkA/TcBF1kAvu/XuHM74yeu8aKs76VhcqL9V7b/1ONFe',
         'Преподаватель'
     );
 
@@ -142,7 +142,7 @@ VALUES
         'Петрова',
         'Елена',
         'elena_petrova',
-        crypt ('password8', gen_salt ('bf')),
+        '$2b$12$siH/7SrHERtO4xEteWH2gO89klI8vSFNQEtTxH9ePkEc4ZfE9tf2y',
         'Преподаватель'
     );
 
@@ -153,7 +153,7 @@ VALUES
         'Соколов',
         'Игорь',
         'igor_sokolov',
-        crypt ('password9', gen_salt ('bf')),
+        '$2b$12$J0pH3d5hnVsTiCd/ejDsSe6w5DihWnoVSBfUV2AaFQbUxi.p2dUPC',
         'Материально. отвественный'
     );
 
@@ -164,7 +164,7 @@ VALUES
         'Михайлов',
         'Олег',
         'oleg_mikhailov',
-        crypt ('password10', gen_salt ('bf')),
+        '$2b$12$ZtaZtOur4y0qndyIQc5z/ODnn0xB6JBCXWrD.TcRZixQPSQs7OMH.',
         'Преподаватель'
     );
 
@@ -175,7 +175,7 @@ VALUES
         'Новиков',
         'Владимир',
         'vladimir_novikov',
-        crypt ('password11', gen_salt ('bf')),
+        '$2b$12$5BqfIT1Db3Bvhp3LDrrCLeklf7uN6DyMBNN0VRmF/NklRXyQSrkPi',
         'Преподаватель'
     );
 
@@ -186,7 +186,7 @@ VALUES
         'Федоров',
         'Максим',
         'maxim_fedorov',
-        crypt ('password12', gen_salt ('bf')),
+        '$2b$12$m9R9fzy7.92Gk4t.zT4fYuHxhyKd2dXVcaFXCkUBXPs8xddoDehtK',
         'Преподаватель'
     );
 
@@ -197,7 +197,7 @@ VALUES
         'Морозова',
         'Анастасия',
         'anastasia_morozova',
-        crypt ('password13', gen_salt ('bf')),
+        '$2b$12$bamUiT1sDD3mBXhwC2pD6egBirQUHgTd6t1UdA2zIoa56QPkg50aG',
         'Материально. отвественный'
     );
 

@@ -19,9 +19,4 @@ class PasswordManager:
 
     @staticmethod
     def verify_password(input_password, hashed_password):
-        return bcrypt.checkpw(
-            input_password.encode('utf-8'),
-            hashed_password.encode('utf-8'))
-
-
-print(PasswordManager.hash_password("qXmZZ7U8"))
+        return bcrypt.checkpw(input_password.encode('utf-8'), hashed_password.encode('utf-8'))
