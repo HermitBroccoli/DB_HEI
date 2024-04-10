@@ -4,4 +4,8 @@ asyncpg
 flake8
 autopep8
 bcrypt
-senvdatareader
+envdatareader
+fastapi[all]
+uvicorn
+asyncpg
+python-multipart

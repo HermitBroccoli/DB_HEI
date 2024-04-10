@@ -20,5 +20,3 @@ DB_CONNECT: database = {
     "passwd": env.get_value("DB_PASSWD"),
     "dbName": env.get_value("DB_NAME")
 }
-
-print(DB_CONNECT)
