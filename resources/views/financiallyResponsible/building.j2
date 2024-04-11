@@ -18,7 +18,7 @@
                 <th class="border text-left pl-[10px]">Аудитория</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody data-list>
             {% if emu != [] %}
             {% for item in emu %}
             <tr class="border">
@@ -55,6 +55,48 @@
             {% endif %}
         </tbody>
     </table>
+</div>
+
+<div class="w-full h-full fixed top-0 left-0 right-0 bottom-0 bg-gray-700/50 hidden" id="modal-building-edit">
+    <div id="modal-building-container" class="w-[550px]">
+        <form id="modal-building-form" class="bg-white p-[20px] rounded">
+            <div class="w-full space-y-4 flex flex-col">
+                <label for="id_kadasrt" class="block">
+                    <span>Иденфекатор кадастра</span>
+                    <input class="w-full border-b" id="id_kadasrt" type="number" min="1" placeholder="Идентификатор кадастра" />
+                </label>
+                <label for="buildingname" class="block">
+                    <span>Название здания</span>
+                    <input class="w-full border-b" id="buildingname" type="text" placeholder="Название здания" />
+                </label>
+                <label for="land" class="block">
+                    <span>Площадь здания</span>
+                    <input class="w-full border-b" id="land" type="number" min="1" placeholder="Площадь здания" />
+                </label>
+                <label for="material" class="block">
+                    <span>Материал</span>
+                    <input class="w-full border-b" id="material" type="text" placeholder="Материал" />
+                </label>
+                <label for="wear" class="block">
+                    <span>Износ здания</span>
+                    <input class="w-full border-b" id="wear" type="number" min="1" placeholder="Износ здания" />
+                </label>
+                <label for="flow" class="block">
+                    <span></span>
+                    <input class="w-full border-b" id="flow" type="number" min="1" placeholder="Износ здания" />
+                </label>
+
+                <label for="comment" class="block">
+                    <span>Комментарий</span>
+                    <textarea class="w-full border-b" id="comment" type="text" placeholder="Комментарий"></textarea>
+                </label>
+            </div>
+            <div class="w-full flex justify-end space-x-4 mt-[20px]">
+                <button id="modal-save" class="bg-green-700 text-white px-[10px] py-[5px] rounded-md">Сохранить</button>
+                <button id="modal-close" class="bg-red-700 text-white px-[10px] py-[5px] rounded-md">Отмена</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 {% endblock %}
