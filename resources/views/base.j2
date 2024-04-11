@@ -41,11 +41,15 @@
                 <h2>Университет</h2>
             </div>
             
-            {# {% if request.path !=  %} #}
+            {% if request.cookies.Auth != "true" %}
             <div>
                 <a class="block px-[20px] py-[5px] bg-green-500" href="/login">Вход</a>
             </div>
-            {# {% endif %%} #}
+            {% else %}
+            <div>
+                <a href="/profile">Профиль</a>
+            </div>
+            {% endif %}
         </div>
     </header>
     {% endif %}

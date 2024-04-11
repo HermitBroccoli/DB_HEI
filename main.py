@@ -2,12 +2,15 @@ from fastapi import Request, Response, status
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi import FastAPI, Form
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
 from database.connection import *
 from typing import List, Dict
 from pydantic import BaseModel
+
+# routers
+from routers.material import materials
 
 
 async def isUsers(request: Request) -> dict:
@@ -62,6 +65,20 @@ async def index(request: Request):
 
 @app.get('/login')
 async def login(request: Request):
+
+    auth = request.cookies.get('Auth')
+
+    if auth:
+        res = await isUsers(request=request)
+
+        if res.get('admin'):
+            return RedirectResponse('/admin')
+        elif res.get('materOt'):
+            return RedirectResponse('/materil')
+        elif res.get('user'):
+            return RedirectResponse('/user')
+                
+
     return tempalte.TemplateResponse("login/login.j2", {"request": request})
 
 
@@ -81,8 +98,6 @@ async def login(user: User, response: Response):
 
     response.set_cookie(key="Auth", value="true")
     response.set_cookie(key="id", value=res.get("id"), httponly=True)
-    response.set_cookie(key="role", value=res.get(
-        "role").encode('utf-8'), httponly=True)
 
     return {
         "id": res.get("id"),
@@ -92,6 +107,10 @@ async def login(user: User, response: Response):
 
 @app.get('/admin')
 async def admin(request: Request):
+    auth = request.cookies.get('Auth')
+    
+    if not auth:
+        return RedirectResponse('/')
     
     res = await isUsers(request)
 
@@ -99,6 +118,8 @@ async def admin(request: Request):
         return RedirectResponse('/')
 
     return tempalte.TemplateResponse("admin/index.j2", {"request": request})
+
+app.include_router(materials)
 
 if __name__ == "__main__":
     import uvicorn
