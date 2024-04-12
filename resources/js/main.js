@@ -416,16 +416,6 @@ document.addEventListener('DOMContentLoaded', () => {
             await editKadastr(id)
         }
 
-        const modalEdit = async (id) => {
-            await getKadastr(id)
-
-            form.removeEventListener('submit', async (e) => await createKadastr(e))
-
-            form.addEventListener('submit', async (e) => submitEdit(e, id))
-
-            openModal()
-        }
-
         const deleteKadastr = async (id) => {
             await axios.delete(`/materil/kadastr/delete/${id}`)
                 .then((res) => {
@@ -447,7 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault()
 
             await axios.post(`/materil/kadastr/create`, {
-                id_kadastr: input1.value,
+                id: input1.value,
                 street: input2.value,
                 house: input3.value,
                 year: input4.value,
@@ -465,6 +455,16 @@ document.addEventListener('DOMContentLoaded', () => {
             form.removeEventListener('submit', async (e) => submitEdit(e))
 
             form.addEventListener('submit', async (e) => await createKadastr(e))
+
+            openModal()
+        }
+
+        const modalEdit = async (id) => {
+            await getKadastr(id)
+
+            form.removeEventListener('submit', async (e) => await createKadastr(e))
+
+            form.addEventListener('submit', async (e) => submitEdit(e, id))
 
             openModal()
         }

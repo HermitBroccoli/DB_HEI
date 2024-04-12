@@ -21,9 +21,7 @@ async def isUsers(request: Request) -> dict:
     if not id:
         return RedirectResponse('/login')
 
-    res = await getUser(int(id))
-
-    print(res)
+    res = await getUser(int(id))    
 
     if res.get('role') == "Администратор":
         return {
@@ -379,16 +377,22 @@ async def editKadastrs(kadastr: EditKadastr, request: Request):
     res = await editKadastrsOne(kadastr.id_kadastr, kadastr.street, kadastr.house, kadastr.year)
     return
 
-# @materials.post('/kadastr/create')
-# async def createKadastr(kadastr: EditKadastr, request: Request):
-#     auth = request.cookies.get('Auth')
-#     if not auth:
-#         return "redirect"
-#     user = await isUsers(request)
-#     if not user.get('materOt'):
-#         return "redirect"
-#     res = await createKadastrs(kadastr.street, kadastr.house, kadastr.year)
-#     return
+class CreateKadastr(BaseModel):
+    id: str
+    street: str
+    house: str
+    year: str
+
+@materials.post('/kadastr/create')
+async def createKadastr(kadastr: CreateKadastr, request: Request):
+    auth = request.cookies.get('Auth')
+    if not auth:
+        return "redirect"
+    user = await isUsers(request)
+    if not user.get('materOt'):
+        return "redirect"
+    res = await createKadastrs(kadastr.id, kadastr.street, kadastr.house, kadastr.year)
+    return
 
 
 @materials.delete('/kadastr/delete/{item}')
@@ -403,9 +407,6 @@ async def deleteKadastr(item: str, request: Request):
     if not users.get('materOt'):
         return "redirect"
 
-    try:
-        res = await deleteKadastrs(item)
-    except:
-        pass
+    res = await deleteKadastrs(item)
 
     return res

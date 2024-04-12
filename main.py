@@ -119,6 +119,15 @@ async def admin(request: Request):
 
     return tempalte.TemplateResponse("admin/index.j2", {"request": request})
 
+@app.get('/logout')
+async def logout(request: Request, response: Response):
+
+    response.delete_cookie("Auth")
+    response.delete_cookie("id")
+
+    
+    return
+
 app.include_router(materials)
 
 if __name__ == "__main__":

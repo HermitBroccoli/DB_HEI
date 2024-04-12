@@ -146,6 +146,8 @@ async def getBuildingKadastr(id):
         return res
     except Exception as e:
         pass
+    except psycopg2.errors.ForeignKeyViolation as e:
+        engien.rollback()
 
 
 async def getOneBuilding(id):
@@ -155,6 +157,8 @@ async def getOneBuilding(id):
         return res
     except Exception as e:
         pass
+    except psycopg2.errors.ForeignKeyViolation as e:
+        engien.rollback()
 
 
 async def createBuilding(buildingname, land, material, wear, flow, comment, id_kadastr):
@@ -164,6 +168,8 @@ async def createBuilding(buildingname, land, material, wear, flow, comment, id_k
         engien.commit()
     except Exception as e:
         pass
+    except psycopg2.errors.ForeignKeyViolation as e:
+        engien.rollback()
 
 
 async def deleteBuilding(id):
@@ -173,6 +179,8 @@ async def deleteBuilding(id):
         return True
     except Exception as e:
         return False
+    except psycopg2.errors.ForeignKeyViolation as e:
+        engien.rollback()
 
 
 async def editBuildingst(id, buildingname, land, material, wear, flow, comment, id_kadastr):
@@ -182,6 +190,8 @@ async def editBuildingst(id, buildingname, land, material, wear, flow, comment, 
         engien.commit()
     except Exception as e:
         pass
+    except psycopg2.errors.ForeignKeyViolation as e:
+        engien.rollback()
 
 
 async def selectKadastr():
@@ -191,6 +201,8 @@ async def selectKadastr():
         return res
     except Exception as e:
         pass
+    except psycopg2.errors.ForeignKeyViolation as e:
+        engien.rollback()
 
 
 async def getOneKadastr(id):
@@ -200,6 +212,8 @@ async def getOneKadastr(id):
         return res
     except Exception as e:
         pass
+    except psycopg2.errors.ForeignKeyViolation as e:
+        engien.rollback()
 
 
 async def editKadastrsOne(id, street, house, year):
@@ -209,6 +223,8 @@ async def editKadastrsOne(id, street, house, year):
         engien.commit()
     except Exception as e:
         pass
+    except psycopg2.errors.ForeignKeyViolation as e:
+        engien.rollback()
 
 
 async def deleteKadastrs(id):
@@ -216,5 +232,21 @@ async def deleteKadastrs(id):
         cursor.execute("DELETE FROM kadastr WHERE kadastr = %s", (id,))
         engien.commit()
         return True
+    except psycopg2.errors.ForeignKeyViolation as e:
+        engien.rollback()
+        return False
+    except psycopg2.Error as e:
+        pass
     except Exception as e:
+        pass
+
+async def createKadastrs(id, street, house, year):
+    try:
+        cursor.execute("INSERT INTO kadastr (kadastr, street, house, year) VALUES (%s, %s, %s, %s)",
+                       (id, street, house, year))
+        engien.commit()
+    except Exception as e:
+        pass
+    except psycopg2.errors.ForeignKeyViolation as e:
+        engien.rollback()
         return False
