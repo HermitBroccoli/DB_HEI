@@ -32,7 +32,7 @@ def verify_password(password: str, hash_password: str) -> bool:
     return bcrypt.checkpw(password.encode('utf-8'), hash_password.encode('utf-8'))
 
 
-async def logins(username: str, password: str) -> object:
+async def logins(username: str, password: str):
     try:
         # Выполняем запрос
         cursor.execute("SELECT * FROM users WHERE login = %s", (username,))
@@ -68,12 +68,14 @@ async def getUser(id: int) -> dict:
 
         id, surname, name, login, passwords, role = res
 
-        return {
+        arra: dict = {
             "id": id,
             "surname": surname,
             "name": name,
             "role": role
         }
+
+        return arra
 
     except Exception as e:
         pass
@@ -136,6 +138,7 @@ async def selectBuilding():
     except Exception as e:
         pass
 
+
 async def getBuildingKadastr(id):
     try:
         cursor.execute("SELECT * FROM kadastr WHERE kadastr = %s", (id,))
@@ -143,3 +146,75 @@ async def getBuildingKadastr(id):
         return res
     except Exception as e:
         pass
+
+
+async def getOneBuilding(id):
+    try:
+        cursor.execute("SELECT * FROM buildings WHERE id_building = %s", (id,))
+        res = cursor.fetchone()
+        return res
+    except Exception as e:
+        pass
+
+
+async def createBuilding(buildingname, land, material, wear, flow, comment, id_kadastr):
+    try:
+        cursor.execute("INSERT INTO buildings (buildingname, land, material, wear, flow, comment, id_kadastr) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                       (buildingname, int(land), material, int(wear), int(flow), comment, int(id_kadastr)))
+        engien.commit()
+    except Exception as e:
+        pass
+
+
+async def deleteBuilding(id):
+    try:
+        cursor.execute("DELETE FROM buildings WHERE id_building = %s", (id,))
+        engien.commit()
+        return True
+    except Exception as e:
+        return False
+
+
+async def editBuildingst(id, buildingname, land, material, wear, flow, comment, id_kadastr):
+    try:
+        cursor.execute("UPDATE buildings SET buildingname = %s, land = %s, material = %s, wear = %s, flow = %s, comment = %s, id_kadastr = %s WHERE id_building = %s",
+                       (buildingname, int(land), material, int(wear), int(flow), comment, int(id_kadastr), id))
+        engien.commit()
+    except Exception as e:
+        pass
+
+
+async def selectKadastr():
+    try:
+        cursor.execute("SELECT * FROM kadastr ORDER BY kadastr")
+        res = cursor.fetchall()
+        return res
+    except Exception as e:
+        pass
+
+
+async def getOneKadastr(id):
+    try:
+        cursor.execute("SELECT * FROM kadastr WHERE kadastr = %s", (id,))
+        res = cursor.fetchone()
+        return res
+    except Exception as e:
+        pass
+
+
+async def editKadastrsOne(id, street, house, year):
+    try:
+        cursor.execute("UPDATE kadastr SET street = %s, house = %s, year = %s WHERE kadastr = %s",
+                       (street, house, year, id))
+        engien.commit()
+    except Exception as e:
+        pass
+
+
+async def deleteKadastrs(id):
+    try:
+        cursor.execute("DELETE FROM kadastr WHERE kadastr = %s", (id,))
+        engien.commit()
+        return True
+    except Exception as e:
+        return False

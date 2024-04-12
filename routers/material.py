@@ -18,10 +18,12 @@ materials = APIRouter(
 async def isUsers(request: Request) -> dict:
     id = request.cookies.get('id')
 
-    res = await getUser(int(id))
-
     if not id:
         return RedirectResponse('/login')
+
+    res = await getUser(int(id))
+
+    print(res)
 
     if res.get('role') == "Администратор":
         return {
@@ -127,7 +129,7 @@ async def createProperty(property: PropertyCreate, request: Request):
     user = await isUsers(request)
     if not user.get('materOt'):
         return "redirect"
-    
+
     res = await createPropetry(property.unitname, property.datestart, property.cost, property.costyear, property.costafter, property.period, property.hallid)
 
 
@@ -185,6 +187,7 @@ async def deleteProperty(property: PropertyDelete, request: Request):
 
     return
 
+
 @materials.get('/building')
 async def building(request: Request):
     auth = request.cookies.get('Auth')
@@ -194,7 +197,7 @@ async def building(request: Request):
     user = await isUsers(request)
     if not user.get('materOt'):
         return RedirectResponse('/login')
-    
+
     emu = await selectBuilding()
 
     if not emu:
@@ -222,5 +225,187 @@ async def building(request: Request):
             'flow': flow,
             'comment': comment
         })
-    
+
     return template.TemplateResponse('financiallyResponsible/building.j2', {'request': request, 'emu': new_emu})
+
+
+@materials.get('/building/edit/{id}')
+async def editBuilding(id: Union[str, int], request: Request):
+    auth = request.cookies.get('Auth')
+    if not auth:
+        return "redirect"
+    user = await isUsers(request)
+    if not user.get('materOt'):
+        return "redirect"
+
+    res = await getOneBuilding(id)
+
+    id_build, id_kadastr, buildingname, land, material, wear, flow, comment = res
+
+    return {
+        'id': id_build,
+        'kadastr': id_kadastr,
+        'buildingname': buildingname,
+        'land': land,
+        'material': material,
+        'wear': wear,
+        'flow': flow,
+        'comment': comment
+    }
+
+
+class EditBuilding(BaseModel):
+    buildingname: str
+    land: str
+    material: str
+    wear: str
+    flow: str
+    comment: str
+    id_kadastr: str
+    id_building: Union[str, int]
+
+
+@materials.patch('/building/edit')
+async def editBuildings(building: EditBuilding, request: Request):
+    auth = request.cookies.get('Auth')
+    if not auth:
+        return "redirect"
+    user = await isUsers(request)
+    if not user.get('materOt'):
+        return "redirect"
+    res = await editBuildingst(building.id_building, building.buildingname, building.land, building.material, building.wear, building.flow, building.comment, building.id_kadastr)
+    return
+
+
+class BuildingCreate(BaseModel):
+    buildingname: str
+    land: str
+    material: str
+    wear: str
+    flow: str
+    comment: str
+    id_kadastr: str
+
+
+@materials.post('/building/create')
+async def createBuildings(building: BuildingCreate, request: Request):
+    auth = request.cookies.get('Auth')
+    if not auth:
+        return "redirect"
+    user = await isUsers(request)
+    if not user.get('materOt'):
+        return "redirect"
+
+    res = await createBuilding(building.buildingname, building.land, building.material, building.wear, building.flow, building.comment, building.id_kadastr)
+
+    return
+
+
+class BuildingDelete(BaseModel):
+    id_building: Union[str, int]
+
+
+@materials.delete('/building/delete')
+async def deleteBuildingS(item: BuildingDelete, request: Request):
+    auth = request.cookies.get('Auth')
+    if not auth:
+        return "redirect"
+    user = await isUsers(request)
+    if not user.get('materOt'):
+        return "redirect"
+    res = await deleteBuilding(int(item.id_building))
+    return
+
+
+@materials.get('/kadastr')
+async def kadastr(request: Request):
+    auth = request.cookies.get('Auth')
+    if not auth:
+        return "redirect"
+    user = await isUsers(request)
+    if not user.get('materOt'):
+        return "redirect"
+    emu = await selectKadastr()
+    if not emu:
+        emu = []
+
+    new_emu = []
+
+    for i in emu:
+        id, street, house, year = i
+        new_emu.append({
+            'id': id,
+            'street': street,
+            'house': house,
+            'year': year
+        })
+
+    return template.TemplateResponse('financiallyResponsible/kadastr.j2', {'request': request, 'emu': new_emu})
+
+
+@materials.get('/kadastr/edit/{id}')
+async def editKadastr(id: Union[str, int], request: Request):
+    auth = request.cookies.get('Auth')
+    if not auth:
+        return "redirect"
+    user = await isUsers(request)
+    if not user.get('materOt'):
+        return "redirect"
+    res = await getOneKadastr(id)
+    id_kadastr, street, house, year = res
+    return {
+        'id': id_kadastr,
+        'street': street,
+        'house': house,
+        'year': year
+    }
+
+
+class EditKadastr(BaseModel):
+    id_kadastr: str
+    street: str
+    house: str
+    year: str
+
+
+@materials.patch('/kadastr/edit')
+async def editKadastrs(kadastr: EditKadastr, request: Request):
+    auth = request.cookies.get('Auth')
+    if not auth:
+        return RedirectResponse('/login')
+    user = await isUsers(request)
+    if not user.get('materOt'):
+        return RedirectResponse('/login')
+    res = await editKadastrsOne(kadastr.id_kadastr, kadastr.street, kadastr.house, kadastr.year)
+    return
+
+# @materials.post('/kadastr/create')
+# async def createKadastr(kadastr: EditKadastr, request: Request):
+#     auth = request.cookies.get('Auth')
+#     if not auth:
+#         return "redirect"
+#     user = await isUsers(request)
+#     if not user.get('materOt'):
+#         return "redirect"
+#     res = await createKadastrs(kadastr.street, kadastr.house, kadastr.year)
+#     return
+
+
+@materials.delete('/kadastr/delete/{item}')
+async def deleteKadastr(item: str, request: Request):
+    auth = request.cookies.get('Auth')
+
+    if not auth:
+        return "redirect"
+
+    users = await isUsers(request)
+
+    if not users.get('materOt'):
+        return "redirect"
+
+    try:
+        res = await deleteKadastrs(item)
+    except:
+        pass
+
+    return res

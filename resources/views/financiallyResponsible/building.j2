@@ -5,15 +5,20 @@
 {% block property %}
 
 <div class="container mx-auto">
+
+    <div class="w-full mb-[20px]">
+        <button id="modal-building-create" type="button" class="bg-green-700 text-white px-[10px] py-[5px] rounded-md">Добавить</button>
+    </div>
+
     <table class="w-full">
         <thead class="border">
             <tr class="border">
                 <th class="border text-left pl-[10px]">#</th>
                 <th class="border text-left pl-[10px]">Адресс</th>
-                <th class="border text-left pl-[10px]">Куплено</th>
-                <th class="border text-left pl-[10px]">Стоимость</th>
-                <th class="border text-left pl-[10px]">Год переоценки</th>
-                <th class="border text-left pl-[10px]">Стоимость после переоценки</th>
+                <th class="border text-left pl-[10px]">Название дома</th>
+                <th class="border text-left pl-[10px]">Площадь</th>
+                <th class="border text-left pl-[10px]">Материал</th>
+                <th class="border text-left pl-[10px]"></th>
                 <th class="border text-left pl-[10px]">Срок службы</th>
                 <th class="border text-left pl-[10px]">Аудитория</th>
             </tr>
@@ -82,8 +87,8 @@
                     <input class="w-full border-b" id="wear" type="number" min="1" placeholder="Износ здания" />
                 </label>
                 <label for="flow" class="block">
-                    <span></span>
-                    <input class="w-full border-b" id="flow" type="number" min="1" placeholder="Износ здания" />
+                    <span>Число этажей</span>
+                    <input class="w-full border-b" id="flow" type="number" min="1" placeholder="Число этажей" />
                 </label>
 
                 <label for="comment" class="block">
@@ -93,7 +98,7 @@
             </div>
             <div class="w-full flex justify-end space-x-4 mt-[20px]">
                 <button id="modal-save" class="bg-green-700 text-white px-[10px] py-[5px] rounded-md">Сохранить</button>
-                <button id="modal-close" class="bg-red-700 text-white px-[10px] py-[5px] rounded-md">Отмена</button>
+                <button type="button" id="modal-close" class="bg-red-700 text-white px-[10px] py-[5px] rounded-md">Отмена</button>
             </div>
         </form>
     </div>

@@ -209,7 +209,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (buildHome) {
         const list = document.querySelector('[data-list]'),
             btnEdit = list.querySelectorAll('[data-edit]'),
-            btnDelete = list.querySelectorAll('[data-delete]')
+            btnDelete = list.querySelectorAll('[data-delete]'),
+            btnCreate = document.querySelector('#modal-building-create')
+
 
         const saveClose = buildHome.querySelector('#modal-save'),
             closeBtn = buildHome.querySelector('#modal-close');
@@ -230,11 +232,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const deleteItem = async (id) => {
             axios.delete('/materil/building/delete',
-            {
-                id_building: id
-            }
-        )
+                {
+                    id_building: id
+                }
+            )
         }
+
+        const form = buildHome.querySelector('#modal-building-form')
+
+        buildHome.addEventListener('submit', async (e) => {
+            e.preventDefault()
+
+        })
 
         const closeModal = () => {
             input1.value = ""
@@ -244,20 +253,232 @@ document.addEventListener('DOMContentLoaded', () => {
             input5.value = ""
             input6.value = ""
             input7.value = ""
-            
+
             buildHome.classList.add('hidden')
         }
 
         const openModalEdit = async (id) => {
+
+            const { data } = await axios.get(`/materil/building/edit/${id}`)
+
+            input1.value = data.kadastr
+            input2.value = data.buildingname
+            input3.value = data.land
+            input4.value = data.material
+            input5.value = data.wear
+            input6.value = data.flow
+            input7.value = data.comment
+
+            const submitDates = async () => {
+                const res = await axios.patch(`/materil/building/edit`, {
+                    buildingname: input2.value,
+                    land: input3.value,
+                    material: input4.value,
+                    wear: input5.value,
+                    flow: input6.value,
+                    comment: input7.value,
+                    id_kadastr: input1.value,
+                    id_building: id
+                })
+                    .then(res => {
+                        if (res.status == 200) {
+                            saveClose.removeEventListener('click', async () => await submitDates())
+                            window.location.reload()
+                        }
+                    }
+                    )
+            }
+
+            saveClose.addEventListener('click', async () => await submitDates())
+
             openModal()
         }
 
         const openModalCreate = async () => {
 
+            const sumbitCreater = async () => {
+                data = {
+                    id_kadastr: input1.value,
+                    buildingname: input2.value,
+                    land: input3.value,
+                    material: input4.value,
+                    wear: input5.value,
+                    flow: input6.value,
+                    comment: input7.value
+                }
+
+                await axios.post(`/materil/building/create`, {
+                    ...data
+                })
+                    .then(res => {
+                        if (res.status == 200) {
+                            window.location.reload()
+                        }
+                    })
+                    .catch(error => alert('Произошла ошибка!'))
+            }
+
+            buildHome.addEventListener('submit', async (e) => await sumbitCreater())
+
+            openModal()
         }
 
+        const deleteBuilding = async (id) => {
+            await axios.delete(`/materil/building/delete`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    data: {
+                        id_building: id
+                    }
+                })
+                .then((res) => {
+                    if (res.status == 200) {
+                        window.location.reload()
+                    }
+                })
+                .catch(
+                    error => alert('Произошла ошибка!')
+                )
+        }
+
+        btnCreate.addEventListener('click', async () => await openModalCreate())
+
         btnEdit.forEach(element => {
-            element.addEventListener('click', async () => openModalEdit(element.getAttribute('data-edit')))
+            element.addEventListener('click', async () => await openModalEdit(element.getAttribute('data-edit')))
+        })
+
+        btnDelete.forEach(element => {
+            element.addEventListener('click', async () => await deleteBuilding(element.getAttribute('data-delete')))
+        })
+    }
+
+    const kadastrModal = document.querySelector('#modal-kadastr')
+
+    if (kadastrModal) {
+        const list = document.querySelector('#kadastr-table'),
+            form = kadastrModal.querySelector('#modal-kadastr-form')
+
+        // btn
+        const btnEdit = list.querySelectorAll('[data-edit]'),
+            btnDelete = list.querySelectorAll('[data-delete]'),
+            btnCreate = document.querySelector('#modal-kadastr-create'),
+            btnSave = document.querySelector('#modal-kadastr-save'),
+            btnClose = document.querySelector('#modal-kadastr-cancel')
+
+        // inputs
+        const input1 = kadastrModal.querySelector('#id_kadastr'),
+            input2 = kadastrModal.querySelector('#street'),
+            input3 = kadastrModal.querySelector('#house'),
+            input4 = kadastrModal.querySelector('#year')
+
+        const getKadastr = async (id) => {
+            const { data } = await axios.get(`/materil/kadastr/edit/${id}`)
+
+            input1.value = data.id
+            input2.value = data.street
+            input3.value = data.house
+            input4.value = data.year
+        }
+
+        const editKadastr = async (id) => {
+            const res = await axios.patch(`/materil/kadastr/edit`, {
+                id_kadastr: input1.value,
+                street: input2.value,
+                house: input3.value,
+                year: input4.value,
+            })
+                .then(res => {
+                    if (res.status == 200) {
+                        window.location.reload()
+                    }
+                })
+                .catch(error => alert('Произошла ошибка!'))
+        }
+
+        const openModal = () => {
+            kadastrModal.classList.remove('hidden')
+        }
+
+        const closeModal = () => {
+
+            input1.value = ""
+            input2.value = ""
+            input3.value = ""
+            input4.value = ""
+
+            kadastrModal.classList.add('hidden')
+        }
+
+        const submitEdit = async (e) => {
+            e.preventDefault()
+            await editKadastr(id)
+        }
+
+        const modalEdit = async (id) => {
+            await getKadastr(id)
+
+            form.removeEventListener('submit', async (e) => await createKadastr(e))
+
+            form.addEventListener('submit', async (e) => submitEdit(e))
+
+            openModal()
+        }
+
+        const deleteKadastr = async (id) => {
+            await axios.delete(`/materil/kadastr/delete/${id}`)
+                .then((res) => {
+                    if (res.status == 200) {
+                        if (res.data != false) {
+                            window.location.reload()
+                        } else {
+                            alert("Удалить не получится из-за целостности базы!")
+                        }
+                    }
+                })
+                .catch(
+                    error => alert('Произошла ошибка!')
+                )
+
+        }
+
+        const createKadastr = async (e) => {
+            e.preventDefault()
+
+            await axios.post(`/materil/kadastr/create`, {
+                id_kadastr: input1.value,
+                street: input2.value,
+                house: input3.value,
+                year: input4.value,
+            })
+                .then(res => {
+                    if (res.status == 200) {
+                        window.location.reload()
+                    }
+                })
+                .catch(error => alert('Произошла ошибка!'))
+        }
+
+        const openModalCreate = async () => {
+
+            form.removeEventListener('submit', async (e) => submitEdit(e))
+
+            form.addEventListener('submit', async (e) => await createKadastr(e))
+
+            openModal()
+        }
+
+        btnCreate.addEventListener('click', async () => await openModalCreate())
+
+        btnClose.addEventListener('click', () => closeModal())
+
+        btnEdit.forEach(element => {
+            element.addEventListener('click', async () => await modalEdit(element.getAttribute('data-edit')))
+        })
+
+        btnDelete.forEach(element => {
+            element.addEventListener('click', async () => await deleteKadastr(element.getAttribute('data-delete')))
         })
     }
 })
