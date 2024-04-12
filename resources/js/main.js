@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
             kadastrModal.classList.add('hidden')
         }
 
-        const submitEdit = async (e) => {
+        const submitEdit = async (e, id) => {
             e.preventDefault()
             await editKadastr(id)
         }
@@ -421,7 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             form.removeEventListener('submit', async (e) => await createKadastr(e))
 
-            form.addEventListener('submit', async (e) => submitEdit(e))
+            form.addEventListener('submit', async (e) => submitEdit(e, id))
 
             openModal()
         }

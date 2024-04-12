@@ -40,14 +40,26 @@
                 <img src="/static/img/logo.png" class="w-10 h-10 mr-[20px]">
                 <h2>Университет</h2>
             </div>
-            
+
             {% if request.cookies.Auth != "true" %}
             <div>
                 <a class="block px-[20px] py-[5px] bg-green-500" href="/login">Вход</a>
             </div>
             {% else %}
             <div>
-                <a href="/profile">Профиль</a>
+                <ul>
+                    <li>
+                        <span>Профиль</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+
+                        <ul>
+                            <a href="/logout">Выйти</a>
+                        </ul>
+                    </li>
+                </ul>
             </div>
             {% endif %}
         </div>
@@ -57,7 +69,9 @@
     <main class="main">
         {% block content %}{% endblock %}
     </main>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js" integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+        integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/static/js/main.js"></script>
 </body>
 
