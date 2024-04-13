@@ -1,0 +1,11 @@
+{% extends "financiallyResponsible/index.j2" %}
+
+{% block title %}Список имущества{% endblock %}
+
+{% block property %}
+
+    {% for item in emu %}
+        <img src="data:image/jpeg;base64,{{item.photo}}" />
+    {% endfor %}
+
+{% endblock %}

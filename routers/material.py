@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from database.connection import *
 from typing import Union
 from datetime import datetime
+import base64
 
 template = Jinja2Templates(directory='resources/views')
 
@@ -410,3 +411,24 @@ async def deleteKadastr(item: str, request: Request):
     res = await deleteKadastrs(item)
 
     return res
+
+@materials.get('/images')
+async def images(request: Request):
+    auth = request.cookies.get('Auth')
+    if not auth:
+        return "redirect"
+    user = await isUsers(request)
+    if not user.get('materOt'):
+        return "redirect"
+    emu = await selectImages()
+    if not emu:
+        emu = []
+    new_emu = []
+    for i in emu:
+        id, id_building, path = i
+        new_emu.append({
+            'id': id,
+            'id_building': id_building,
+            'photo': base64.b64encode(path).decode('utf-8')
+        })
+    return template.TemplateResponse('financiallyResponsible/images.j2', {'request': request, 'emu': new_emu})

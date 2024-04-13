@@ -97,6 +97,8 @@ async def deletePropetry(id: int):
         cursor.execute("DELETE FROM equipment WHERE unitid = %s", (id,))
         engien.commit()
         return True
+    except psycopg2.errors.ForeignKeyViolation as e:
+        engien.rollback()
     except Exception as e:
         return False
 
@@ -155,10 +157,10 @@ async def getOneBuilding(id):
         cursor.execute("SELECT * FROM buildings WHERE id_building = %s", (id,))
         res = cursor.fetchone()
         return res
-    except Exception as e:
-        pass
     except psycopg2.errors.ForeignKeyViolation as e:
         engien.rollback()
+    except Exception as e:
+        pass
 
 
 async def createBuilding(buildingname, land, material, wear, flow, comment, id_kadastr):
@@ -166,10 +168,10 @@ async def createBuilding(buildingname, land, material, wear, flow, comment, id_k
         cursor.execute("INSERT INTO buildings (buildingname, land, material, wear, flow, comment, id_kadastr) VALUES (%s, %s, %s, %s, %s, %s, %s)",
                        (buildingname, int(land), material, int(wear), int(flow), comment, int(id_kadastr)))
         engien.commit()
-    except Exception as e:
-        pass
     except psycopg2.errors.ForeignKeyViolation as e:
         engien.rollback()
+    except Exception as e:
+        pass
 
 
 async def deleteBuilding(id):
@@ -177,10 +179,10 @@ async def deleteBuilding(id):
         cursor.execute("DELETE FROM buildings WHERE id_building = %s", (id,))
         engien.commit()
         return True
-    except Exception as e:
-        return False
     except psycopg2.errors.ForeignKeyViolation as e:
         engien.rollback()
+    except Exception as e:
+        return False
 
 
 async def editBuildingst(id, buildingname, land, material, wear, flow, comment, id_kadastr):
@@ -221,10 +223,10 @@ async def editKadastrsOne(id, street, house, year):
         cursor.execute("UPDATE kadastr SET street = %s, house = %s, year = %s WHERE kadastr = %s",
                        (street, house, year, id))
         engien.commit()
-    except Exception as e:
-        pass
     except psycopg2.errors.ForeignKeyViolation as e:
         engien.rollback()
+    except Exception as e:
+        pass
 
 
 async def deleteKadastrs(id):
@@ -240,6 +242,7 @@ async def deleteKadastrs(id):
     except Exception as e:
         pass
 
+
 async def createKadastrs(id, street, house, year):
     try:
         cursor.execute("INSERT INTO kadastr (kadastr, street, house, year) VALUES (%s, %s, %s, %s)",
@@ -250,3 +253,11 @@ async def createKadastrs(id, street, house, year):
     except psycopg2.errors.ForeignKeyViolation as e:
         engien.rollback()
         return False
+
+async def selectImages():
+    try:
+        cursor.execute("SELECT * FROM buildingphotos ORDER BY id_building")
+        res = cursor.fetchall()
+        return res
+    except Exception as e:
+        pass
