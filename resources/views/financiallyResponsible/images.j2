@@ -4,8 +4,17 @@
 
 {% block property %}
 
+<div class="container mx-auto">
     {% for item in emu %}
-        <img src="data:image/jpeg;base64,{{item.photo}}" />
+    <div class="image-card">
+        <div class="image-card__img">
+            <img src="/static/img/building/{{item.photo}}" loading="lazy" />
+        </div>
+        <div class="image-card__text">
+            {{ item.id_building }}
+        </div>
+    </div>
     {% endfor %}
+</div>
 
 {% endblock %}

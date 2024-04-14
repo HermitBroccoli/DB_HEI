@@ -62,7 +62,7 @@ CREATE TABLE
     IF NOT EXISTS buildingPhotos (
         id_photo SERIAL PRIMARY KEY,
         id_building INT REFERENCES buildings (id_building),
-        photo BYTEA
+        photo VARCHAR(255) NOT NULL
     );
 
 CREATE TABLE

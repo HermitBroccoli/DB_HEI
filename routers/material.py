@@ -426,9 +426,11 @@ async def images(request: Request):
     new_emu = []
     for i in emu:
         id, id_building, path = i
+
+        res = await selectBuildingsOne(id_building)
         new_emu.append({
             'id': id,
-            'id_building': id_building,
-            'photo': base64.b64encode(path).decode('utf-8')
+            'id_building': res,
+            'photo': path
         })
     return template.TemplateResponse('financiallyResponsible/images.j2', {'request': request, 'emu': new_emu})

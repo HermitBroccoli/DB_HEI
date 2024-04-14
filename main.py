@@ -11,11 +11,12 @@ from pydantic import BaseModel
 
 # routers
 from routers.material import materials
+from routers.upload import uploads
 
 
 async def isUsers(request: Request) -> dict:
     id = request.cookies.get('id')
-    
+
     res = await getUser(int(id))
 
     if not id:
@@ -77,7 +78,6 @@ async def login(request: Request):
             return RedirectResponse('/materil')
         elif res.get('user'):
             return RedirectResponse('/user')
-                
 
     return tempalte.TemplateResponse("login/login.j2", {"request": request})
 
@@ -108,10 +108,10 @@ async def login(user: User, response: Response):
 @app.get('/admin')
 async def admin(request: Request):
     auth = request.cookies.get('Auth')
-    
+
     if not auth:
         return RedirectResponse('/')
-    
+
     res = await isUsers(request)
 
     if not res.get('admin'):
@@ -119,16 +119,17 @@ async def admin(request: Request):
 
     return tempalte.TemplateResponse("admin/index.j2", {"request": request})
 
+
 @app.get('/logout')
 async def logout(request: Request, response: Response):
 
     response.delete_cookie("Auth")
     response.delete_cookie("id")
 
-    
     return
 
 app.include_router(materials)
+app.include_router(uploads)
 
 if __name__ == "__main__":
     import uvicorn

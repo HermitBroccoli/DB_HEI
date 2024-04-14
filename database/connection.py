@@ -190,10 +190,10 @@ async def editBuildingst(id, buildingname, land, material, wear, flow, comment, 
         cursor.execute("UPDATE buildings SET buildingname = %s, land = %s, material = %s, wear = %s, flow = %s, comment = %s, id_kadastr = %s WHERE id_building = %s",
                        (buildingname, int(land), material, int(wear), int(flow), comment, int(id_kadastr), id))
         engien.commit()
-    except Exception as e:
-        pass
     except psycopg2.errors.ForeignKeyViolation as e:
         engien.rollback()
+    except Exception as e:
+        pass
 
 
 async def selectKadastr():
@@ -201,10 +201,10 @@ async def selectKadastr():
         cursor.execute("SELECT * FROM kadastr ORDER BY kadastr")
         res = cursor.fetchall()
         return res
-    except Exception as e:
-        pass
     except psycopg2.errors.ForeignKeyViolation as e:
         engien.rollback()
+    except Exception as e:
+        pass
 
 
 async def getOneKadastr(id):
@@ -212,10 +212,10 @@ async def getOneKadastr(id):
         cursor.execute("SELECT * FROM kadastr WHERE kadastr = %s", (id,))
         res = cursor.fetchone()
         return res
-    except Exception as e:
-        pass
     except psycopg2.errors.ForeignKeyViolation as e:
         engien.rollback()
+    except Exception as e:
+        pass
 
 
 async def editKadastrsOne(id, street, house, year):
@@ -254,10 +254,31 @@ async def createKadastrs(id, street, house, year):
         engien.rollback()
         return False
 
+
 async def selectImages():
     try:
         cursor.execute("SELECT * FROM buildingphotos ORDER BY id_building")
         res = cursor.fetchall()
+        return res
+    except Exception as e:
+        pass
+
+
+async def createImages(id_building, image):
+    try:
+        cursor.execute("INSERT INTO buildingphotos (id_building, photo) VALUES (%s, %s)",
+                       (id_building, image))
+        engien.commit()
+    except psycopg2.errors.ForeignKeyViolation as e:
+        engien.rollback()
+        return False
+    except Exception as e:
+        pass
+
+async def selectBuildingsOne(id):
+    try:
+        cursor.execute("SELECT * FROM buildings WHERE id_building = %s", (id,))
+        res = cursor.fetchone()
         return res
     except Exception as e:
         pass
