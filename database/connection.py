@@ -282,3 +282,29 @@ async def selectBuildingsOne(id):
         return res
     except Exception as e:
         pass
+
+async def getBuildall(id):
+    try:
+        cursor.execute("SELECT * FROM buildings WHERE id_building = %s", (id,))
+        res = cursor.fetchone()
+        return res
+    except Exception as e:
+        pass
+
+async def getOnePhotoBuilding(id):
+    try:
+        cursor.execute("SELECT * FROM buildingphotos WHERE id_building = %s", (id,))
+        res = cursor.fetchone()
+        return res
+    except Exception as e:
+        pass
+
+async def getHallBuilding(id):
+    try:
+        cursor.execute("SELECT * FROM halls WHERE buildingid = %s", (id,))
+        res = cursor.fetchall()
+        return res
+    except Exception as e:
+        pass
+
+ 

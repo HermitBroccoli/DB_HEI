@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
     font-family: "Roboto", sans-serif;
 }
@@ -33,4 +37,28 @@ header {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.level_0 li {
+    position: relative;
+
+    ul#level_1 {
+        position: absolute;
+        top: 100%;
+        left: 10%;
+        background: #f4f4f4;
+        box-shadow: 0px 0px 5px 0px rgba(89, 89, 89, 0.75);
+        -webkit-box-shadow: 0px 0px 5px 0px rgba(89, 89, 89, 0.75);
+        -moz-box-shadow: 0px 0px 5px 0px rgba(89, 89, 89, 0.75);
+        border-radius: 8px;
+        padding: 20px;
+
+        & li {
+            cursor: pointer;
+        }
+    }
+}
+
+.level_0 li:hover>ul#level_1 {
+    display: block !important;
 }

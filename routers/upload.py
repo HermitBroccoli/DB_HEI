@@ -8,7 +8,7 @@ uploads = APIRouter()
 
 
 # Папка для сохранения загруженных файлов
-UPLOAD_DIRECTORY = "resources/img/building"
+UPLOAD_DIRECTORY = "resources/img"
 
 if not os.path.exists(UPLOAD_DIRECTORY):
     os.makedirs(UPLOAD_DIRECTORY)
@@ -20,7 +20,7 @@ async def upload_file(file: UploadFile = File(...)):
     contents = await file.read()
 
     # Сохраняем изображение в папку uploads
-    filename = os.path.join(UPLOAD_DIRECTORY, file.filename)
+    filename = os.path.join(UPLOAD_DIRECTORY, 'building', file.filename)
     with open(filename, "wb") as f:
         f.write(contents)
 

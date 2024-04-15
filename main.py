@@ -12,29 +12,34 @@ from pydantic import BaseModel
 # routers
 from routers.material import materials
 from routers.upload import uploads
+from routers.users import users
+from routers.reports import reports
 
 
 async def isUsers(request: Request) -> dict:
     id = request.cookies.get('id')
+
+    if not id:
+        return RedirectResponse('/login')
 
     res = await getUser(int(id))
 
     if not id:
         return RedirectResponse('/login')
 
-    if res.get('role') == "Администратор":
+    if res['role'] == "Администратор":
         return {
             "admin": True,
             "materOt": False,
             "user": False
         }
-    elif res.get('role') == "Материально. отвественный":
+    elif res['role'] == "Материально. отвественный":
         return {
             "admin": False,
             "materOt": True,
             "user": False
         }
-    elif res.get('role') == "Пользователь":
+    elif res['role'] == "Преподаватель":
         return {
             "admin": False,
             "materOt": False,
@@ -48,6 +53,7 @@ tempalte = Jinja2Templates(directory="resources/views")
 
 app.mount("/static", StaticFiles(directory="resources/"), name="resources")
 app.mount("/public", StaticFiles(directory="public"), name="public")
+# app.mount("/download", StaticFiles(directory="temp"), name="download")
 
 app.add_middleware(
     CORSMiddleware,
@@ -69,8 +75,9 @@ async def login(request: Request):
 
     auth = request.cookies.get('Auth')
 
+    res = await isUsers(request)
+    
     if auth:
-        res = await isUsers(request=request)
 
         if res.get('admin'):
             return RedirectResponse('/admin')
@@ -90,8 +97,6 @@ class User(BaseModel):
 @app.post('/login')
 async def login(user: User, response: Response):
     res: Dict = await logins(user.login, user.password)
-
-    print(res)
 
     if not res:
         return JSONResponse(content={"msg": "Invalid username or password"}, status_code=status.HTTP_401_UNAUTHORIZED)
@@ -130,6 +135,8 @@ async def logout(request: Request, response: Response):
 
 app.include_router(materials)
 app.include_router(uploads)
+app.include_router(users)
+app.include_router(reports)
 
 if __name__ == "__main__":
     import uvicorn

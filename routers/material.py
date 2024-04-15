@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from database.connection import *
 from typing import Union
 from datetime import datetime
-import base64
+
 
 template = Jinja2Templates(directory='resources/views')
 
@@ -36,7 +36,7 @@ async def isUsers(request: Request) -> dict:
             "materOt": True,
             "user": False
         }
-    elif res.get('role') == "Пользователь":
+    elif res.get('role') == "Преподаватель":
         return {
             "admin": False,
             "materOt": False,
@@ -428,9 +428,28 @@ async def images(request: Request):
         id, id_building, path = i
 
         res = await selectBuildingsOne(id_building)
+
+        id, id_kadastr, buildingname, land, material, wear, flow, comment = res
+
+
+        id, street, house, year = await getOneKadastr(id_kadastr)
+
         new_emu.append({
             'id': id,
-            'id_building': res,
+            'info': {
+                'address': {
+                    'street': street,
+                    'house': house,
+                    'year': year
+                },
+                'buildingname': buildingname,
+                'land': land,
+                'material': material,
+                'wear': wear,
+                'flow': flow,
+                'comment': comment
+
+            },
             'photo': path
         })
     return template.TemplateResponse('financiallyResponsible/images.j2', {'request': request, 'emu': new_emu})

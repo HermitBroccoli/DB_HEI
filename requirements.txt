@@ -9,5 +9,4 @@ fastapi[all]
 uvicorn
 asyncpg
 python-multipart
-python-magic
-libmagic
+pdfkit

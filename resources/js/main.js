@@ -28,6 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (data.role == "Материально. отвественный") {
                         window.location.href = "/materil"
                     }
+
+                    if (data.role == "Преподаватель") {
+                        window.location.href = "/user"
+                    }
                 })
         }
 
@@ -480,5 +484,42 @@ document.addEventListener('DOMContentLoaded', () => {
         btnDelete.forEach(element => {
             element.addEventListener('click', async () => await deleteKadastr(element.getAttribute('data-delete')))
         })
+    }
+
+    const logout = document.querySelector('#logout')
+
+    if (logout) {
+        const clickLockout = async () => {
+            await axios.get('/logout')
+                .then(res => {
+                    if (res.status == 200) {
+                        window.location.href = '/'
+                    }
+                })
+                .catch(error => alert('Произошла ошибка!'))
+
+        }
+
+        logout.addEventListener('click', clickLockout)
+    }
+
+    const reportBuild = document.querySelector('#reportBuild')
+
+    if (reportBuild) {
+        const clickReportBuild = async () => {
+
+            const getParam = prompt("Введите номер здания")
+
+            if (getParam) {
+                const { data } = await axios.get(`/materil/report/build/${getParam}`)
+                    .catch(error => alert('Произошла ошибка!'))
+
+                console.log(data);
+            }
+
+        }
+
+        reportBuild.addEventListener('click', clickReportBuild)
+
     }
 })

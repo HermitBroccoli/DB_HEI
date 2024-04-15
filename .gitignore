@@ -6,3 +6,6 @@ __pycache__
 *.zip
 *.rar
 *.exe
+node_modules
+temp/*
+!temp/.git*

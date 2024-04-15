@@ -5,24 +5,35 @@
 {% block content %}
 
 <div class="nav container mx-auto my-[20px]">
-<ul class="flex space-x-4">
-    <li>
-        <a href="/materil">Главная</a>
-    </li>
-    <li>
-        <a href="/materil/property">Имущество</a>
-    </li>
-    <li>
-        <a href="/materil/building">Здания</a>
-    </li>
-    <li>
-        <a href="/materil/kadastr">Кадастр</a>
-    </li>
-    <li>
-        <a href="/materil/images">Фотографии</a>
-    </li>
-</ul>
+    <ul class="flex space-x-4">
+        <li>
+            <a href="/materil">Главная</a>
+        </li>
+        <li>
+            <a href="/materil/property">Имущество</a>
+        </li>
+        <li>
+            <a href="/materil/building">Здания</a>
+        </li>
+        <li>
+            <a href="/materil/kadastr">Кадастр</a>
+        </li>
+        <li>
+            <a href="/materil/images">Фотографии</a>
+        </li>
+    </ul>
 </div>
+
+{% if request.path == "/materil/" %}
+<div class="container mx-auto my-[20px] space-x-4">
+    <button type="button" class="btn btn-primary" id="reportBuild">
+        Отчет по зданию
+    </button>
+    <button type="button" class="btn btn-primary" data-bs-target="#reportBuildWear">
+        Отчет по износу зданий
+    </button>
+</div>
+{% endif %}
 
 {% block property %}{% endblock %}
 
