@@ -9,4 +9,3 @@ fastapi[all]
 uvicorn
 asyncpg
 python-multipart
-pdfkit
