@@ -9,3 +9,4 @@ __pycache__
 node_modules
 temp/*
 !temp/.git*
+!wkhtmltox-0.12.6-1.msvc2015-win64.exe
