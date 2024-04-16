@@ -53,16 +53,6 @@ tempalte = Jinja2Templates(directory="resources/views")
 
 app.mount("/static", StaticFiles(directory="resources/"), name="resources")
 app.mount("/public", StaticFiles(directory="public"), name="public")
-# app.mount("/download", StaticFiles(directory="temp"), name="download")
-
-app.add_middleware(
-    CORSMiddleware,
-    # This allows requests from all origins, you might want to specify specific origins
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
-    allow_headers=["*"],  # You can specify specific headers
-)
 
 
 @app.get("/")
@@ -76,7 +66,7 @@ async def login(request: Request):
     auth = request.cookies.get('Auth')
 
     res = await isUsers(request)
-    
+
     if auth:
 
         if res.get('admin'):
@@ -102,7 +92,8 @@ async def login(user: User, response: Response):
         return JSONResponse(content={"msg": "Invalid username or password"}, status_code=status.HTTP_401_UNAUTHORIZED)
 
     response.set_cookie(key="Auth", value="true", httponly=True, max_age=7200)
-    response.set_cookie(key="id", value=res.get("id"), httponly=True, max_age=7200)
+    response.set_cookie(key="id", value=res.get("id"),
+                        httponly=True, max_age=7200)
 
     return {
         "id": res.get("id"),
