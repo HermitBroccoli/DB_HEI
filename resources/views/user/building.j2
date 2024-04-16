@@ -1,0 +1,44 @@
+{% extends "user/index.j2" %}
+
+{% block title %}Список имущества{% endblock %}
+
+{% block user %}
+
+<div class="container mx-auto">
+
+    <table class="w-full">
+        <thead class="border">
+            <tr class="border">
+                <th class="border text-left pl-[10px]">#</th>
+                <th class="border text-left pl-[10px]">Адресс</th>
+                <th class="border text-left pl-[10px]">Название дома</th>
+                <th class="border text-left pl-[10px]">Площадь</th>
+                <th class="border text-left pl-[10px]">Материал</th>
+                <th class="border text-left pl-[10px]"></th>
+                <th class="border text-left pl-[10px]">Срок службы</th>
+                <th class="border text-left pl-[10px]">Аудитория</th>
+            </tr>
+        </thead>
+        <tbody data-list>
+            {% if emu != [] %}
+            {% for item in emu %}
+            <tr class="border">
+                <td class="border pl-[10px]">{{ item.id }}</td>
+                <td class="border pl-[10px]">
+                    ул. {{ item.kadastr.street }} д. {{ item.kadastr.house }}
+                </td>
+                <td class="border pl-[10px]">{{ item.buildingname }}</td>
+                <td class="border pl-[10px]">{{ item.land }}</td>
+                <td class="border pl-[10px]">{{ item.material }}</td>
+                <td class="border pl-[10px]">{{ item.wear }}</td>
+                <td class="border pl-[10px]">{{ item.flow }}</td>
+                <td class="border pl-[10px]">{{ item.comment }}</td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <div></div>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

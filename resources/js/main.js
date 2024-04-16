@@ -510,11 +510,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const getParam = prompt("Введите номер здания")
 
-            if (getParam) {
-                const { data } = await axios.get(`/materil/report/build/${getParam}`)
-                    .catch(error => alert('Произошла ошибка!'))
+            if (Number(getParam) != NaN && getParam >= 1) {
 
-                console.log(data);
+                let errors = ''
+
+                const response = await axios.get(`/materil/report/build/${getParam}`, {
+                    responseType: 'blob'
+                })
+                    .catch(error => errors = error)
+
+                if (!errors) {
+                    if ('content-disposition' in response.headers) {
+                        const contentDisposition = response.headers['content-disposition'];
+
+                        // Получаем имя файла из заголовка Content-Disposition
+                        const filename = contentDisposition.split(';')[1].split('filename=')[1].trim();
+
+                        // Создаем объект Blob из полученных данных
+                        const blob = new Blob([response.data]);
+
+                        // Создаем ссылку на Blob
+                        const url = window.URL.createObjectURL(blob);
+
+                        // Создаем ссылку для скачивания файла
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', filename);
+
+                        // Добавляем ссылку в документ и эмулируем клик для скачивания файла
+                        document.body.appendChild(link);
+                        link.click();
+
+                        // Освобождаем ресурсы после завершения скачивания
+                        window.URL.revokeObjectURL(url);
+                        link.remove();
+                    } else {
+                        console.error('Заголовок content-disposition отсутствует в ответе сервера');
+                        alert('Произошла ошибка!');
+                    }
+                } else {
+                    alert("Данного дома нет в списке!")
+                }
+            } else {
+                alert('Введите корректный номер здания!')
             }
 
         }

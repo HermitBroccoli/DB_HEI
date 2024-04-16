@@ -101,8 +101,8 @@ async def login(user: User, response: Response):
     if not res:
         return JSONResponse(content={"msg": "Invalid username or password"}, status_code=status.HTTP_401_UNAUTHORIZED)
 
-    response.set_cookie(key="Auth", value="true")
-    response.set_cookie(key="id", value=res.get("id"), httponly=True)
+    response.set_cookie(key="Auth", value="true", httponly=True, max_age=7200)
+    response.set_cookie(key="id", value=res.get("id"), httponly=True, max_age=7200)
 
     return {
         "id": res.get("id"),

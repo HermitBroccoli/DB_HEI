@@ -1,0 +1,29 @@
+{% extends "user/index.j2" %}
+
+{% block title %}Список имущества{% endblock %}
+
+{% block user %}
+
+<div class="container mx-auto">
+    <div class="w-full mb-[20px]">
+        <button id="image-add" class="bg-green-700 text-white px-[10px] py-[5px] rounded-md">Добавить</button>
+    </div>
+    <div class="w-full flex justify-between flex-wrap">
+        {% for item in emu %}
+        <div class="image-card w-[450px] space-y-4">
+            <div class="image-card__img w-full h-[300px] object-cover">
+                <img class="w-fullo h-[300px]" alt="{{ item.name }}" src="/static/img/building/{{item.photo}}"
+                    loading="lazy" />
+            </div>
+            <div class="image-card__text">
+                <h2>{{ item.info.buildingname }}</h2>
+                <div>
+                    Адрес: <span>ул. {{ item.info.address.street }} д. {{ item.info.address.house }}</span> 
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

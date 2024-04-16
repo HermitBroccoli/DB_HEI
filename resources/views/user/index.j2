@@ -5,12 +5,31 @@
 {% block content %}
 
 <div class="container mx-auto">
-    <div class="nav flex justify-center">
-
+    <div class="nav container mx-auto my-[20px]">
+        <ul class="flex space-x-4">
+            <li>
+                <a href="/user">Главная</a>
+            </li>
+            <li>
+                <a href="/user/property">Имущество</a>
+            </li>
+            <li>
+                <a href="/user/building">Здания</a>
+            </li>
+            <li>
+                <a href="/user/kadastr">Кадастр</a>
+            </li>
+        </ul>
     </div>
 
     <div class="w-full">
-
+        {% if request.path == '/user/' %}
+        <div class="w-full">
+            Добро пожаловать в ваш профиль! Здесь вы можете просматривать информацию о имуществе нашего института. Это<br>
+            поможет вам быть в курсе доступных ресурсов и использовать их в своей педагогической деятельности. Спасибо<br>
+            за ваш вклад в образовательный процесс!
+        </div>
+        {% endif %}
         {% block user %}{% endblock %}
     </div>
 </div>

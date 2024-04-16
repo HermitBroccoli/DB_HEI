@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 from fastapi import Request, Response
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import FileResponse, RedirectResponse, JSONResponse
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from database.connection import *
 from typing import Union
@@ -9,6 +10,7 @@ from datetime import datetime
 from subprocess import run
 from jinja2 import Template
 import re
+import os
 
 reports = APIRouter(
     tags=["Reports"]
@@ -100,9 +102,19 @@ async def build_report(item: Union[str, int], request: Request):
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"detail": "Not authenticated"})
 
     res = await getBuildall(item)
+
+    if not res:
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"detail": "Not found"})
+
     id, id_kadastr, buildingname, land, material, wear, flow, comment = res
     ids, street, house, year = await getOneKadastr(id_kadastr)
-    photo_id, id_build, photo = await getOnePhotoBuilding(id)
+    res_img = await getOnePhotoBuilding(id)
+
+    if res_img:
+        photo_id, id_build, photo = res_img
+    else:
+        photo = ""
+
     hall_all = await getHallBuilding(id)
     new_hall = []
 
@@ -148,15 +160,35 @@ async def build_report(item: Union[str, int], request: Request):
         with open(f"temp/{safe_title}.html", "rb") as f:
             html_content = f.read()
 
-        run(["wkhtmltopdf", '--enable-local-file-access', "--quiet", "--disable-javascript", "-",
-            f"temp/{safe_title}.pdf"], input=html_content, check=True)
+        try:
+            run(["wkhtmltopdf", '--enable-local-file-access', "--quiet", "--disable-javascript", "-",
+                 f"temp/{safe_title}.pdf"], input=html_content, check=True)
+        except:
+            pass
 
-        return {"message": "PDF generated successfully", "filename": filename}
+        file_path = os.path.abspath(f"temp/{filename}")
+
+        if os.path.exists(file_path):
+            return FileResponse(file_path, headers={"Content-Disposition": f"attachment; filename={filename}"})
+        else:
+            return {"error": "File not found"}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
     finally:
-        import os
         # Remove the temporary HTML file
         os.remove(f"temp/{safe_title}.html")
+
+
+@reports.get("/materil/report/download/{item}")
+async def download_report(item: str, request: Request):
+    auth = request.cookies.get("Auth")
+    if not auth:
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"detail": "Not authenticated"})
+    path = f"temp/{item}"
+
+    if os.path.exists(path):
+        return FileResponse(path=path)
+    else:
+        return {"error": "File not found"}

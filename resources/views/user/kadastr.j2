@@ -1,0 +1,29 @@
+{% extends "user/index.j2" %}
+
+{% block title %}Кадастр{% endblock %}
+
+{% block user %}
+
+<div class="container mx-auto">
+    <table class="w-full">
+        <thead class="border">
+            <tr class="border">
+                <th class="border text-left pl-[10px]">#</th>
+                <th class="border text-left pl-[10px]">Улица</th>
+                <th class="border text-left pl-[10px]">Номер дома</th>
+                <th class="border text-left pl-[10px]">Год постройки</th>
+            </tr>
+        </thead>
+        <tbody id="kadastr-table">
+            {% for item in emu %}
+            <tr class="border">
+                <td class="border pl-[10px]">{{ item.id }}</td>
+                <td class="border pl-[10px]">ул. {{ item.street }}</td>
+                <td class="border pl-[10px]">д. {{ item.house }}</td>
+                <td class="border pl-[10px]">{{ item.year }} г.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

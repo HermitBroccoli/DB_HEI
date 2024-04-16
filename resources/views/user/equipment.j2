@@ -1,0 +1,37 @@
+{% extends "user/index.j2" %}
+
+{% block title %}Список имущества{% endblock %}
+
+{% block user %}
+
+<div class="container mx-auto">
+    <table class="w-full">
+        <thead class="border">
+            <tr class="border">
+                <th class="border text-left pl-[10px]">#</th>
+                <th class="border text-left pl-[10px]">Наименование</th>
+                <th class="border text-left pl-[10px]">Куплено</th>
+                <th class="border text-left pl-[10px]">Стоимость</th>
+                <th class="border text-left pl-[10px]">Год переоценки</th>
+                <th class="border text-left pl-[10px]">Стоимость после переоценки</th>
+                <th class="border text-left pl-[10px]">Срок службы</th>
+                <th class="border text-left pl-[10px]">Аудитория</th>
+            </tr>
+        </thead>
+        <tbody class="border" id="property-list">
+            {% for item in emu %}
+            <tr class="border">
+                <td class="border pl-[10px]">{{ item.id }}</td>
+                <td class="border pl-[10px]">{{ item.name }}</td>
+                <td class="border pl-[10px]">{{ item.datestart }}</td>
+                <td class="border pl-[10px]">{{ item.cost }}</td>
+                <td class="border pl-[10px]">{{ item.costyear }}</td>
+                <td class="border pl-[10px]">{{ item.costafter }}</td>
+                <td class="border pl-[10px]">{{ item.period }}</td>
+                <td class="border pl-[10px]">{{ item.hallid }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
